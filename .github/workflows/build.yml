@@ -1,0 +1,33 @@
+name: Build
+
+env:
+  QUAY_BASE: quay.io/miabbott
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: "Build container image"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Build and push container images
+        run: |
+          set -xeuo pipefail
+          mkdir -p ~/.docker
+          cat > ~/.docker/config.json <<EOF
+          ${{ secrets.QUAY_AUTH }}
+          EOF
+          podman build -f Dockerfile -t "${{ env.QUAY_BASE }}/bpytop:latest" .
+          podman push ""${{ env.QUAY_BASE }}/bpytop:latest""
+          rm ~/.docker/config.json
+
