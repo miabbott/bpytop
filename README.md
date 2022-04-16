@@ -1,4 +1,4 @@
-# bpytip
+# bpytop
 
 [![quay.io repository](https://img.shields.io/badge/updated-2022--04--10-green)](https://quay.io/repository/miabbott/bpytop)
 

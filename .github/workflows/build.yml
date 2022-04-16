@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -46,4 +46,3 @@ jobs:
           fi
           git commit -m "README.md: update build date"
           git push
-
