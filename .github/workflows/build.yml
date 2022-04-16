@@ -30,4 +30,20 @@ jobs:
           podman build -f Dockerfile -t "${{ env.QUAY_BASE }}/bpytop:latest" .
           podman push ""${{ env.QUAY_BASE }}/bpytop:latest""
           rm ~/.docker/config.json
+      - name: Update README and Containerfile
+        run: |
+          # This is load-bearing: GitHub will disable the job if the repo
+          # doesn't stay active.  Do not enable branch protection for main;
+          # it'll break this.
+          set -xeuo pipefail
+          git config user.name 'Micah Abbott'
+          git config user.email miabbott@redhat.com
+          sed -i "s/updated-.*-green/updated-$(date +%Y--%m--%d)-green/" README.md
+          git add README.md
+          if git diff --quiet --staged --exit-code; then
+            echo "README.md already up to date"
+            exit 0
+          fi
+          git commit -m "README.md: update build date"
+          git push
 
